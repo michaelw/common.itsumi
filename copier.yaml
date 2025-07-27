@@ -1,0 +1,98 @@
+_min_copier_version: "9.8.0"
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{@"
+  variable_end_string: "@}"
+  comment_start_string: "{#"
+  comment_end_string: "#}"
+
+_subdirectory: starter-template
+
+# Project metadata
+chart_name:
+  type: str
+  help: Helm chart name
+  placeholder: my-awesome-app
+  default: "{@ _copier_conf.dst_path | basename @}"
+  validator: >-
+    {% if not (chart_name | regex_search("^[a-z0-9-]+$")) %}
+    Chart name must be lowercase alphanumeric with hyphens only
+    {% endif %}
+
+chart_description:
+  type: str
+  help: Chart description
+  placeholder: A Helm chart for deploying my application on Kubernetes
+  default: "A Helm chart for Kubernetes"
+
+app_version:
+  type: str
+  help: Application version
+  default: "latest"
+  placeholder: "1.0.0"
+
+chart_version:
+  type: str
+  help: Chart version
+  default: "0.1.0"
+  placeholder: "0.1.0"
+
+# Image configuration
+image_repository:
+  type: str
+  help: Container image repository (can include registry)
+  placeholder: repo/app
+  default: gcr.io/google-samples/hello-app
+
+image_tag:
+  type: str
+  help: Default image tag
+  default: ""
+  placeholder: (same as Chart.yaml appVersion)
+
+global_registry:
+  type: str
+  help: Global image registry URL
+  placeholder: registry.example.com
+  default: ""
+  validator: >-
+    {% if global_registry and not (global_registry | regex_search("^[a-zA-Z0-9.-]+$")) %}
+    Global registry must be a valid domain name
+    {% endif %}
+
+# Maintainer information
+maintainer_name:
+  type: str
+  help: Maintainer name (for Chart.yaml)
+  placeholder: Jane Doe
+  default: ""
+
+maintainer_email:
+  type: str
+  help: Maintainer email (for Chart.yaml)
+  placeholder: doe@example.com
+  default: ""
+  validator: >-
+    {% if maintainer_email and not (maintainer_email | regex_search("^[^@]+@[^@]+\.[^@]+$")) %}
+    Please provide a valid email address
+    {% endif %}
+
+# Repository information
+homepage:
+  type: str
+  help: Project homepage URL (optional)
+  placeholder: https://github.com/myorg/myapp
+  default: ""
+
+source_repo:
+  type: str
+  help: Source repository URL (optional)
+  placeholder: https://github.com/myorg/myapp
+  default: ""
+
+_tasks:
+  - command: helm dependency update || true
+    when: "{@ _copier_operation == 'copy' @}"

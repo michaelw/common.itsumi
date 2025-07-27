@@ -1,0 +1,4 @@
+{{/*
+Include gRPC routes if they exist
+*/}}
+{{- include "common.itsumi.grpcroutes.tpl" . }}

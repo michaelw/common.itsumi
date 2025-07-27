@@ -1,0 +1,79 @@
+# Helm chart dependencies
+charts/
+Chart.lock
+*.tgz
+
+# Helm package files
+*.tar.gz
+
+# Helm release files
+release.yaml
+
+# Temporary files
+.tmp/
+tmp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup
+
+# Node modules (if using chart testing tools)
+node_modules/
+
+# Python cache (if using Python tools)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test outputs
+test-output/
+test-results/
+
+# Helm plugin cache
+.helm/
+
+# Values files with secrets (add specific patterns as needed)
+values-secrets.yaml
+values-prod.yaml
+*-secrets.yaml
+
+# Local development overrides
+values-local.yaml
+values-dev.yaml
+
+# Rendered templates for debugging
+rendered/
+debug/
+
+# Documentation build artifacts
+docs/_build/
+docs/.doctrees/
+
+# Coverage reports
+coverage/
+*.cover
+.coverage
+
+# Terraform state files (if using Terraform with Helm)
+*.tfstate
+*.tfstate.*
+.terraform/

@@ -1,0 +1,3 @@
+{{- include "common.itsumi.httproutes.tpl" . }}
+
+{{- include "common.itsumi.grpcroutes.tpl" . }}

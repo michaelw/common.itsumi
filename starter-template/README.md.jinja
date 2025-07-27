@@ -1,0 +1,66 @@
+# {@ chart_name @}
+
+{@ chart_description @}
+
+This Helm chart was generated using the [common.itsumi](https://github.com/michaelw/common.itsumi) template library.
+
+## Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   helm dependency update
+   ```
+
+2. **Deploy the chart:**
+   ```bash
+   helm install {@ chart_name @} .
+   ```
+
+3. **Check the deployment:**
+   ```bash
+   kubectl get pods
+   kubectl get services
+   ```
+
+## Configuration
+
+Edit `values.yaml` to customize your deployment. Key sections include:
+
+- **Image Configuration**: Update `image.repository` and `image.tag`
+- **Resource Limits**: Configure `resources.requests` and `resources.limits`
+- **Environment Variables**: Add to `env` section
+- **Probes**: Customize `livenessProbe` and `readinessProbe`
+- **Ingress**: Update hostname and TLS settings
+- **Autoscaling**: Adjust min/max replicas and CPU thresholds
+
+## Advanced Features
+
+The chart supports advanced features provided by common.itsumi:
+
+- **Multiple Deployments**: For microservices architectures
+- **Jobs**: For database migrations and maintenance tasks
+- **ConfigMaps and Secrets**: For configuration management
+- **Monitoring**: ServiceMonitor and PrometheusRule support
+- **Gateway API**: HTTPRoute and GRPCRoute support
+- **Argo Rollouts**: Progressive delivery strategies
+
+See the [common.itsumi documentation](https://github.com/michaelw/common.itsumi) for detailed configuration options.
+
+## Upgrading
+
+```bash
+helm upgrade {@ chart_name @} .
+```
+
+## Uninstalling
+
+```bash
+helm uninstall {@ chart_name @}
+```
+
+## Support
+
+For issues related to:
+- **This chart**: Check your `values.yaml` configuration
+- **common.itsumi templates**: See [common.itsumi issues](https://github.com/michaelw/common.itsumi/issues)
+- **Kubernetes resources**: Consult the [Kubernetes documentation](https://kubernetes.io/docs/)
