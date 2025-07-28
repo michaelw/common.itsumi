@@ -1,24 +1,103 @@
 # Patterns to ignore when building packages.
 # This supports shell glob matching, relative path matching, and
-# negation (prefixed with !). Only one pattern per line.
+# negation (prefixed with exclamation mark). Only one pattern per line.
+
+# OS generated files
 .DS_Store
-# Common VCS dirs
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Version Control Systems
 .git/
 .gitignore
+.gitattributes
 .bzr/
 .bzrignore
 .hg/
 .hgignore
 .svn/
-# Common backup files
+
+# CI/CD and Development Tools
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+.releaserc.json
+Makefile
+copier.yaml
+
+# Documentation and Examples (not needed in packaged chart)
+docs/
+examples/
+CHANGELOG.md
+CHANGELOG.rst
+CONTRIBUTING.md
+CONTRIBUTING.rst
+TODO.md
+TODO.rst
+
+# Scripts and Development Files
+scripts/
+test/
+tests/
+*.test
+*_test.go
+*_test.py
+
+# Build artifacts and temporary files
 *.swp
 *.bak
 *.tmp
 *.orig
 *~
-# Various IDEs
+*.log
+*.pid
+.nyc_output/
+coverage/
+node_modules/
+.npm
+.yarn-integrity
+
+# IDE and Editor files
 .project
 .idea/
 *.tmproj
 .vscode/
+*.sublime-project
+*.sublime-workspace
+.settings/
+.classpath
+.factorypath
+.buildpath
+.target
+.launch
+.pydevproject
+.metadata
+
+# Development dependencies and lock files (keep Chart.lock for dependencies)
+package-lock.json
+yarn.lock
+Pipfile.lock
+poetry.lock
+composer.lock
+
+# Starter template (for library charts)
 /starter-template/
+
+# Other common excludes
+*.pyc
+*.pyo
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
