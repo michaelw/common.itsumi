@@ -1,3 +1,10 @@
+## [0.1.6](https://github.com/michaelw/common.itsumi/compare/v0.1.5...v0.1.6) (2025-07-28)
+
+
+### Bug Fixes
+
+* **broken docs:** helm template mustaches ([5031ddb](https://github.com/michaelw/common.itsumi/commit/5031ddb68cf4685b753069cb8be713e2b97bb3f1))
+
 ## [0.1.5](https://github.com/michaelw/common.itsumi/compare/v0.1.4...v0.1.5) (2025-07-28)
 
 
