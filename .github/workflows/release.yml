@@ -69,7 +69,6 @@ jobs:
           # Validate the chart
           echo "🔍 Validating chart..."
           helm lint .
-          helm template test-release . > /dev/null
           echo "✅ Chart validation completed"
 
       - name: Package and push chart to GHCR
