@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/michaelw/common.itsumi/compare/v0.1.8...v0.2.0) (2025-07-28)
+
+
+### Features
+
+* update semantic release workflow and remove ORAS ([b5d5b7c](https://github.com/michaelw/common.itsumi/commit/b5d5b7ce6b6cbe606ecadee0a9f36a3057c7cd20))
+
 ## [0.1.8](https://github.com/michaelw/common.itsumi/compare/v0.1.7...v0.1.8) (2025-07-28)
 
 
