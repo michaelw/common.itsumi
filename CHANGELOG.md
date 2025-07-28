@@ -1,3 +1,10 @@
+## [0.1.8](https://github.com/michaelw/common.itsumi/compare/v0.1.7...v0.1.8) (2025-07-28)
+
+
+### Bug Fixes
+
+* correct release badge link in README.md ([5749731](https://github.com/michaelw/common.itsumi/commit/57497314c5f2d5b30045e271204b8bd972d8a99f))
+
 ## [0.1.7](https://github.com/michaelw/common.itsumi/compare/v0.1.6...v0.1.7) (2025-07-28)
 
 
