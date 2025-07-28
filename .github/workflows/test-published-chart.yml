@@ -1,8 +1,10 @@
 name: Test Published Chart
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       version:
@@ -13,6 +15,7 @@ on:
 jobs:
   test-published-chart:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,7 +33,11 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
           else
-            VERSION=${GITHUB_REF#refs/tags/}
+            # For workflow_run trigger, get the version from the head branch tag
+            VERSION="${{ github.event.workflow_run.head_branch }}"
+            if [[ $VERSION == refs/tags/* ]]; then
+              VERSION=${VERSION#refs/tags/}
+            fi
             VERSION=${VERSION#v}
             echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           fi
