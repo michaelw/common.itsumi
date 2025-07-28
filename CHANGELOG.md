@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/michaelw/common.itsumi/compare/v0.1.4...v0.1.5) (2025-07-28)
+
+
+### Bug Fixes
+
+* **release:** specify registry in chart push step for clarity ([3e29767](https://github.com/michaelw/common.itsumi/commit/3e29767e28f800f1f1eb7f444e2b717833e3da16))
+
 ## [0.1.3](https://github.com/michaelw/common.itsumi/compare/v0.1.2...v0.1.3) (2025-07-28)
 
 
