@@ -1,0 +1,60 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Helm
+        uses: ./.github/actions/setup-helm
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install semantic-release and plugins
+        run: |
+          npm install -g \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/exec \
+            conventional-changelog-conventionalcommits
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Run semantic-release to determine if a release should be made
+          npx semantic-release --dry-run > /tmp/semantic-release-output.txt 2>&1 || true
+          
+          # Check if a new version would be released
+          if grep -q "The next release version is" /tmp/semantic-release-output.txt; then
+            echo "New release detected, running full semantic-release"
+            npx semantic-release
+          else
+            echo "No release needed based on conventional commits"
+            cat /tmp/semantic-release-output.txt
+          fi
