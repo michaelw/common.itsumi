@@ -70,6 +70,6 @@ version-bump: ## Bump chart version (usage: make version-bump VERSION=0.2.0)
 		exit 1; \
 	fi
 	@echo "📝 Bumping version to $(VERSION)..."
-	@sed -i '' 's/^version:.*/version: $(VERSION)/' Chart.yaml
-	@sed -i '' 's/^\( \+\)version:.*/\1version: $(VERSION)/' starter-template/Chart.yaml.jinja
+	@sed -i -e 's/^version:.*/version: $(VERSION)/' Chart.yaml
+	@sed -i -e 's/^\( \+\)version:.*/\1version: $(VERSION)/' starter-template/Chart.yaml.jinja
 	@echo "✅ Version bumped to $(VERSION)"
