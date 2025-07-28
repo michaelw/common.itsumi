@@ -1,3 +1,12 @@
+## [0.1.7](https://github.com/michaelw/common.itsumi/compare/v0.1.6...v0.1.7) (2025-07-28)
+
+
+### Bug Fixes
+
+* Makefile ([9a5eef8](https://github.com/michaelw/common.itsumi/commit/9a5eef8dd77324d99a84817d3c0a6f00ec9c73e8))
+* Makefile ([16f862d](https://github.com/michaelw/common.itsumi/commit/16f862dae9591af7f2b00bfbcc22a13de20fd285))
+* trigger semantic release ([baae3e2](https://github.com/michaelw/common.itsumi/commit/baae3e2cfc8a6e419c87e0178efd14befe6227e9))
+
 ## [0.1.6](https://github.com/michaelw/common.itsumi/compare/v0.1.5...v0.1.6) (2025-07-28)
 
 
