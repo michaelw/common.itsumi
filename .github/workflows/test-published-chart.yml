@@ -1,8 +1,6 @@
-name: Test Published Chart
+name: Test Published Chart (Manual)
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -27,35 +25,37 @@ jobs:
       - name: Get version
         id: get_version
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
-          else
-            # For release trigger, get version from the release tag
-            VERSION="${{ github.event.release.tag_name }}"
-
-            # Remove 'v' prefix if present
-            VERSION=${VERSION#v}
-
-            echo "📋 Release version: $VERSION"
-            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          fi
+          VERSION="${{ github.event.inputs.version }}"
+          # Remove 'v' prefix if present
+          VERSION=${VERSION#v}
+          echo "📋 Manual test version: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Test chart pull and validation
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
           CHART_URL="oci://ghcr.io/${{ github.repository_owner }}/common.itsumi"
 
+          # Only run validation if we have a version
+          if [[ -z "$VERSION" ]]; then
+            echo "ℹ️ No version found in Chart.yaml"
+            exit 1
+          fi
+
+          echo "🔍 Validating published chart version: $VERSION"
+          CHART_URL="oci://ghcr.io/${{ github.repository_owner }}/common.itsumi"
+
           echo "🔍 Testing chart pull from GHCR..."
-          helm pull ${CHART_URL} --version ${VERSION}
+          helm pull "${CHART_URL}" --version "${VERSION}"
 
           echo "📦 Extracting and validating chart..."
-          tar -tf common.itsumi-${VERSION}.tgz | head -10
+          tar -tf "common.itsumi-${VERSION}.tgz" | head -10
 
           echo "🔍 Validating chart structure..."
-          helm show chart ${CHART_URL} --version ${VERSION}
+          helm show chart "${CHART_URL}" --version "${VERSION}"
 
           echo "📋 Displaying chart values..."
-          helm show values ${CHART_URL} --version ${VERSION}
+          helm show values "${CHART_URL}" --version "${VERSION}"
 
       - name: Test results
         run: |

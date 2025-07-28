@@ -33,17 +33,6 @@ jobs:
       - name: Set up Helm
         uses: ./.github/actions/setup-helm
 
-      - name: Install ORAS
-        run: |
-          # Install ORAS CLI
-          curl -LO "https://github.com/oras-project/oras/releases/download/v1.1.0/oras_1.1.0_linux_amd64.tar.gz"
-          mkdir -p oras-install/
-          tar -zxf oras_1.1.0_*.tar.gz -C oras-install/
-          sudo mv oras-install/oras /usr/local/bin/
-          rm -rf oras_1.1.0_*.tar.gz oras-install/
-          # Verify installation
-          oras version
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -56,3 +45,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USERNAME: ${{ github.actor }}
         run: semantic-release
+
+      - name: Validate published chart
+        if: success()
+        run: |
+          # Get the version from Chart.yaml
+          VERSION="$(awk '/^version:/{print $2}' Chart.yaml)"
+
+          # Only run validation if we have a version
+          if [[ -z "$VERSION" ]]; then
+            echo "ℹ️ No version found in Chart.yaml"
+            exit 1
+          fi
+
+          echo "🔍 Validating published chart version: $VERSION"
+          CHART_URL="oci://ghcr.io/${{ github.repository_owner }}/common.itsumi"
+
+          echo "🔍 Testing chart pull from GHCR..."
+          helm pull "${CHART_URL}" --version "${VERSION}"
+
+          echo "📦 Extracting and validating chart..."
+          tar -tf "common.itsumi-${VERSION}.tgz" | head -10
+
+          echo "🔍 Validating chart structure..."
+          helm show chart "${CHART_URL}" --version "${VERSION}"
+
+          echo "📋 Displaying chart values..."
+          helm show values "${CHART_URL}" --version "${VERSION}"
+
+          echo "✅ Chart $VERSION successfully validated!"
+          echo "✅ Pull from GHCR registry works correctly"
+          echo "✅ Chart structure and metadata are valid"
