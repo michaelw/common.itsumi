@@ -80,23 +80,11 @@ jobs:
           echo "✅ Chart validation completed"
 
       - name: Package and push chart to GHCR
-        run: |
-          # Package the chart
-          helm package .
-
-          # Verify the expected package was created
-          EXPECTED_PACKAGE="${{ steps.chart_info.outputs.package_file }}"
-          if [[ ! -f "$EXPECTED_PACKAGE" ]]; then
-            echo "❌ Expected package file $EXPECTED_PACKAGE not found!"
-            echo "Available files:"
-            ls -la ./*.tgz 2>/dev/null || echo "No .tgz files found"
-            exit 1
-          fi
-
-          echo "✅ Package created: $EXPECTED_PACKAGE"
-
-          # Push to GHCR using OCI format
-          helm push "$EXPECTED_PACKAGE" oci://ghcr.io/${{ github.repository_owner }}
-
-          echo "✅ Chart successfully published to ghcr.io/${{ github.repository_owner }}/${{ steps.chart_info.outputs.chart_name }}:${{ steps.chart_info.outputs.version }}"
-          echo "📚 Installation instructions available in README.md"
+        uses: appany/helm-oci-chart-releaser@v0.5.0
+        with:
+          name: ${{ steps.chart_info.outputs.chart_name }}
+          repository: ghcr.io/${{ github.repository_owner }}
+          tag: ${{ steps.chart_info.outputs.version }}
+          path: .
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
