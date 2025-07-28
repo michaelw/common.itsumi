@@ -86,5 +86,6 @@ jobs:
           repository: ghcr.io/${{ github.repository_owner }}
           tag: ${{ steps.chart_info.outputs.version }}
           path: .
+          registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
