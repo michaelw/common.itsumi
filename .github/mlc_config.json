@@ -1,0 +1,30 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://registry-1.docker.io"
+    },
+    {
+      "pattern": "^https://github.com/.*/actions/workflows/"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/"
+    }
+  ],
+  "httpStatusCodes": {
+    "400": "warning",
+    "401": "warning",
+    "403": "warning",
+    "404": "error",
+    "405": "warning",
+    "500": "warning",
+    "502": "warning",
+    "503": "warning"
+  },
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackHttpStatus": "warning"
+}

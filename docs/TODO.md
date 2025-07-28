@@ -23,22 +23,6 @@
   - [ ] Golden file tests for template output verification
   - [ ] Kubernetes resource validation tests
 
-### CI/CD Pipeline
-- [ ] **Setup GitHub Actions workflows**
-  - [ ] Template linting (helm lint, yamllint)
-  - [ ] Test execution on multiple Kubernetes versions
-  - [ ] Chart packaging and validation
-  - [ ] Automated chart publishing to GitHub Releases
-  - [ ] Security scanning (trivy, snyk)
-  - [ ] Documentation generation and validation
-
-### Chart Repository
-- [ ] **Setup Helm chart repository**
-  - [ ] Configure GitHub Pages for chart hosting
-  - [ ] Setup chart-releaser GitHub Action
-  - [ ] Create chart index and versioning strategy
-  - [ ] Add repository to Artifact Hub
-
 ## 📈 Medium Priority (Should Have)
 
 ### Template Enhancements

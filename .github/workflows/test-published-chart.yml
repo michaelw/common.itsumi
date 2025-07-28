@@ -1,0 +1,59 @@
+name: Test Published Chart
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Chart version to test'
+        required: true
+        type: string
+
+jobs:
+  test-published-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: ./.github/actions/setup-helm
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Get version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            VERSION=${GITHUB_REF#refs/tags/}
+            VERSION=${VERSION#v}
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Test chart pull and validation
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          CHART_URL="oci://ghcr.io/${{ github.repository_owner }}/common.itsumi"
+          
+          echo "🔍 Testing chart pull from GHCR..."
+          helm pull ${CHART_URL} --version ${VERSION}
+          
+          echo "📦 Extracting and validating chart..."
+          tar -tf common.itsumi-${VERSION}.tgz | head -10
+          
+          echo "🔍 Validating chart structure..."
+          helm show chart ${CHART_URL} --version ${VERSION}
+          
+          echo "📋 Displaying chart values..."
+          helm show values ${CHART_URL} --version ${VERSION}
+
+      - name: Test results
+        run: |
+          echo "✅ Chart ${{ steps.get_version.outputs.version }} successfully validated!"
+          echo "✅ Pull from GHCR registry works correctly"
+          echo "✅ Chart structure and metadata are valid"

@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: ./.github/actions/setup-helm
+
+      - name: Validate Helm chart
+        run: |
+          helm dependency update
+          helm lint .
+          echo "✅ Chart validation completed"
+
+      - name: Validate template helpers
+        run: |
+          echo "🔍 Validating template helpers..."
+          # Check that all helpers mentioned in README exist in templates
+          for helper in $(grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u); do
+            echo "Checking helper: $helper"
+            if ! grep -r "$helper" templates/; then
+              echo "❌ Helper $helper mentioned in README but not found in templates"
+              exit 1
+            fi
+          done
+          echo "✅ All helpers validated"
+
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate README examples
+        run: |
+          # Check if all template helpers mentioned in README exist
+          echo "Validating template helpers..."
+          for helper in $(grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u); do
+            echo "Checking helper: $helper"
+            if ! grep -r "$helper" templates/; then
+              echo "❌ Helper $helper mentioned in README but not found in templates"
+              exit 1
+            fi
+          done
+          echo "✅ All helpers validated"

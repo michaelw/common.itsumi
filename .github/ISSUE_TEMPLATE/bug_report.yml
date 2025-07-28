@@ -1,0 +1,101 @@
+name: 🐛 Bug Report
+description: Report a bug in the common.itsumi library chart
+title: "[Bug]: "
+labels: ["bug", "triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Create a chart with values...
+        2. Run helm template...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: values
+    attributes:
+      label: Chart Values
+      description: The values.yaml configuration you're using
+      render: yaml
+      placeholder: |
+        # Your values.yaml content here
+        deployments:
+          enabled: true
+          # ...
+
+  - type: textarea
+    id: templates
+    attributes:
+      label: Template Usage
+      description: How you're using the templates
+      render: yaml
+      placeholder: |
+        # templates/deployment.yaml
+        {{- include "common.itsumi.deployments.tpl" . }}
+
+  - type: input
+    id: helm-version
+    attributes:
+      label: Helm Version
+      description: What version of Helm are you using?
+      placeholder: "v3.18.4"
+    validations:
+      required: true
+
+  - type: input
+    id: chart-version
+    attributes:
+      label: Chart Version
+      description: What version of common.itsumi are you using?
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: k8s-version
+    attributes:
+      label: Kubernetes Version
+      description: What version of Kubernetes are you targeting?
+      placeholder: "v1.28.0"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
