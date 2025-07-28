@@ -2,7 +2,7 @@ name: Test Published Chart
 
 on:
   workflow_run:
-    workflows: ["Release"]
+    workflows: ["Semantic Release"]
     types: [completed]
     branches: [main]
   workflow_dispatch:

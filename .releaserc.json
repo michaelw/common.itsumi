@@ -7,7 +7,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "CHART_NAME=$(grep '^name:' Chart.yaml | awk '{print $2}') && sed -i 's/^version:.*/version: ${nextRelease.version}/' Chart.yaml && awk '/name: common\\.itsumi/{flag=1} flag && /version:/{gsub(/version: [0-9]+\\.[0-9]+\\.[0-9]+/, \"version: ${nextRelease.version}\")} /repository:/{flag=0} 1' starter-template/Chart.yaml.jinja > temp && mv temp starter-template/Chart.yaml.jinja && rm -f starter-template/charts/*.tgz && helm dependency update && helm package . && helm push \"$CHART_NAME-${nextRelease.version}.tgz\" oci://ghcr.io/$GITHUB_REPOSITORY_OWNER"
+        "prepareCmd": "make version-bump 'VERSION=${nextRelease.version}'",
+        "publishCmd": "make publish"
       }
     ],
     [

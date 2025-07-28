@@ -52,12 +52,9 @@ jobs:
             echo "::warning::Chart dependencies have been modified. Please ensure compatibility."
           fi
 
-      - name: Validate and lint chart
+      - name: Validate Helm chart
         run: |
-          echo "🔍 Validating chart structure and dependencies..."
-          helm dependency update
-          helm lint .
-          echo "✅ Chart validation completed"
+          make test
 
       - name: Check template syntax
         run: |

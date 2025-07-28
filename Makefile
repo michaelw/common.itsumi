@@ -1,6 +1,6 @@
 # Makefile for common.itsumi Helm Library Chart
 
-.PHONY: help lint clean deps package docs info
+.PHONY: help lint test clean deps package docs info
 
 # Default target
 help: ## Show this help message
@@ -8,9 +8,10 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 # Chart variables
+REGISTRY := ghcr.io/michaelw
 CHART_NAME := common.itsumi
 CHART_VERSION := $(shell grep '^version:' Chart.yaml | cut -d' ' -f2)
-REGISTRY := ghcr.io/michaelw
+CHART_PACKAGE = $(CHART_NAME)-$(CHART_VERSION).tgz
 
 # Development targets
 deps: ## Update chart dependencies
@@ -23,10 +24,13 @@ lint: deps ## Lint the chart
 	helm lint .
 	@echo "✅ Chart linting completed"
 
+test: lint ## Test the chart
+
 package: deps lint ## Package the chart
 	@echo "📦 Packaging chart..."
 	helm package .
-	@echo "✅ Chart packaged: $(CHART_NAME)-$(CHART_VERSION).tgz"
+	test -f $(CHART_PACKAGE)
+	@echo "✅ Chart packaged: $(CHART_PACKAGE)"
 
 clean: ## Clean generated files
 	@echo "🧹 Cleaning up..."
@@ -35,13 +39,6 @@ clean: ## Clean generated files
 	rm -rf charts/
 	@echo "✅ Cleanup completed"
 
-# Publishing targets
-publish-ghcr: package ## Publish to GitHub Container Registry
-	@echo "📤 Publishing to GHCR..."
-	@echo "$$GITHUB_TOKEN" | helm registry login ghcr.io -u $$GITHUB_USERNAME --password-stdin
-	helm push $(CHART_NAME)-$(CHART_VERSION).tgz oci://$(REGISTRY)
-	@echo "✅ Published to $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
-
 # Utility targets
 info: ## Show chart information
 	@echo "📊 Chart Information:"
@@ -49,23 +46,23 @@ info: ## Show chart information
 	@echo "  Version: $(CHART_VERSION)"
 	@echo "  Type: Library Chart"
 	@echo "  Registry: $(REGISTRY)"
-	@echo "  Package: $(CHART_NAME)-$(CHART_VERSION).tgz"
+	@echo "  Package: $(CHART_PACKAGE)"
 
 list-templates: ## List all available templates
 	@echo "📋 Available templates:"
 	@grep -h "define.*common\.itsumi\." templates/*.tpl | sed 's/.*define "\([^"]*\)".*/  - \1/' | sort
 
-example-usage: ## Show example usage
-	@echo "💡 Example usage in your chart:"
-	@echo ""
-	@echo "# Chart.yaml"
-	@echo "dependencies:"
-	@echo "  - name: $(CHART_NAME)"
-	@echo "    version: $(CHART_VERSION)"
-	@echo "    repository: oci://$(REGISTRY)"
-	@echo ""
-	@echo "# templates/deployment.yaml"
-	@echo "{{- include \"common.itsumi.deployments.tpl\" . }}"
+# Publishing targets
+publish: package ## Publish to Container Registry
+	@echo "📤 Publishing to $(REGISTRY)..."
+	@echo "$$GITHUB_TOKEN" | oras login ghcr.io -u $$GITHUB_USERNAME --password-stdin
+	@oras push $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION) \
+		--artifact-type application/vnd.cncf.helm.chart.v1 \
+		--annotation "org.opencontainers.artifact.type=application/vnd.cncf.helm.chart.v1" \
+		--annotation "org.opencontainers.ref.name=$(CHART_NAME)" \
+		--annotation "org.opencontainers.version=$(CHART_VERSION)" \
+		$(CHART_PACKAGE):application/vnd.cncf.helm.chart.content.v1.tar+gzip
+	@echo "✅ Published to $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
 
 version-bump: ## Bump chart version (usage: make version-bump VERSION=0.2.0)
 	@if [ -z "$(VERSION)" ]; then \
@@ -74,4 +71,5 @@ version-bump: ## Bump chart version (usage: make version-bump VERSION=0.2.0)
 	fi
 	@echo "📝 Bumping version to $(VERSION)..."
 	@sed -i '' 's/^version:.*/version: $(VERSION)/' Chart.yaml
+	@sed -i '' 's/^\( \+\)version:.*/\1version: $(VERSION)/' starter-template/Chart.yaml.jinja
 	@echo "✅ Version bumped to $(VERSION)"
