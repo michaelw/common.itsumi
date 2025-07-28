@@ -10,7 +10,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common.itsumi
-    version: 0.1.x
+    version: 0.2.x
     repository: oci://ghcr.io/michaelw
 ```
 
@@ -27,12 +27,6 @@ helm dependency update
 # ...
 ```
 
-```yaml
-# Global configuration for all images
-global:
-  imageRegistry: "registry.example.com"
-```
-
 ## Introduction
 
 This chart provides common template helpers and Kubernetes resource templates that can be used to develop new charts using [Helm](https://helm.sh) package manager. It extends the functionality of the Bitnami common library with additional templates specifically designed for modern application deployment patterns.
@@ -41,6 +35,29 @@ This chart provides common template helpers and Kubernetes resource templates th
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
+
+## Starter Chart
+
+This library includes a [Copier](https://copier.readthedocs.io/)-based starter chart template that provides a complete foundation for new applications. Use it to quickly bootstrap new chart development, after answering a few questions (with sensible defaults):
+
+```bash
+# Copy the starter chart
+copier copy --trust https://github.com/michaelw/common.itsumi test-service
+
+# The templates are already configured to use common.itsumi
+helm template test-service
+```
+
+The starter chart includes templates for:
+
+- Deployments
+- Services
+- Jobs
+- Ingress and Gateway API HTTPRoutes/GRPCRoutes
+- ConfigMaps and Secrets
+- Argo Rollouts
+- HPA
+- Extra objects
 
 ## Features
 
@@ -164,8 +181,8 @@ appVersion: "1.0.0"
 
 dependencies:
   - name: common.itsumi
-    version: 0.1.0
-    repository: https://github.com/michaelw/common.itsumi
+    version: 0.2.x
+    repository: oci://ghcr.io/michaelw
 ```
 
 ```yaml
@@ -184,7 +201,7 @@ service:
   ports:
     http:
       port: 80
-      targetPort: 8080
+      targetPort: http
 
 ingress:
   enabled: true
@@ -221,10 +238,9 @@ global:
   imageRegistry: "registry.example.com" # All images use company registry
 
 deployments:
-  enabled: true
-
+  default:
+    enabled: false
   web:
-    enabled: true
     replicaCount: 3
     image:
       repository: myapp/web # Results in: registry.example.com/myapp/web
@@ -239,7 +255,6 @@ deployments:
       targetCPUUtilizationPercentage: 70
 
   api:
-    enabled: true
     replicaCount: 2
     image:
       repository: myapp/api # Results in: registry.example.com/myapp/api
@@ -249,7 +264,6 @@ deployments:
         containerPort: 4000
 
   worker:
-    enabled: true
     replicaCount: 5
     image:
       repository: myapp/worker # Results in: registry.example.com/myapp/worker
@@ -260,27 +274,24 @@ deployments:
       - sidekiq
 
 services:
-  enabled: true
+  default:
+    enabled: false
   web:
     type: ClusterIP
     ports:
       http:
         port: 80
-        targetPort: 3000
-    selector:
-      component: web
+        targetPort: http
   api:
     type: ClusterIP
     ports:
       http:
-        port: 8080
-        targetPort: 4000
-    selector:
-      component: api
+        port: 80
+        targetPort: http
+
 
 jobs:
   migration:
-    enabled: true
     command: ["bundle", "exec", "rails", "db:migrate"]
     restartPolicy: Never
     backoffLimit: 3
@@ -305,28 +316,6 @@ jobs:
 # templates/hpas.yaml
 {{ - include "common.itsumi.hpas.tpl" . }}
 ```
-
-## Starter Chart
-
-This library includes a [Copier](https://copier.readthedocs.io/)-based starter chart template that provides a complete foundation for new applications. Use it to quickly bootstrap new chart development, after answering a few questions (with sensible defaults):
-
-```bash
-# Copy the starter chart
-copier copy --trust https://github.com/michaelw/common.itsumi test-service
-
-# The templates are already configured to use common.itsumi
-helm template test-service
-```
-
-The starter chart includes templates for:
-
-- Deployments
-- Services
-- Ingress and HTTPRoutes/GRPCRoutes
-- ConfigMaps and Secrets
-- Jobs and HPA
-- Argo Rollouts
-- Extra objects
 
 ## Template Reference
 
@@ -401,7 +390,7 @@ service:
   ports:
     http:
       port: 80
-      targetPort: 8080
+      targetPort: http
       protocol: TCP
 ```
 
@@ -417,7 +406,7 @@ services:
     ports:
       http:
         port: 80
-        targetPort: 3000
+        targetPort: http
     selector:
       component: web
   api:
@@ -425,7 +414,7 @@ services:
     ports:
       http:
         port: 8080
-        targetPort: 4000
+        targetPort: http
     selector:
       component: api
 ```
