@@ -198,17 +198,17 @@ ingress:
 
 ```yaml
 # templates/deployments.yaml
-{ { - include "common.itsumi.deployments.tpl" . } }
+{{ - include "common.itsumi.deployments.tpl" . }}
 ```
 
 ```yaml
 # templates/services.yaml
-{ { - include "common.itsumi.services.tpl" . } }
+{{ - include "common.itsumi.services.tpl" . }}
 ```
 
 ```yaml
 # templates/ingresses.yaml
-{ { - include "common.itsumi.ingresses.tpl" . } }
+{{ - include "common.itsumi.ingresses.tpl" . }}
 ```
 
 ### Microservices Architecture
@@ -288,22 +288,22 @@ jobs:
 
 ```yaml
 # templates/deployments.yaml
-{ { - include "common.itsumi.deployments.tpl" . } }
+{{ - include "common.itsumi.deployments.tpl" . }}
 ```
 
 ```yaml
 # templates/services.yaml
-{ { - include "common.itsumi.services.tpl" . } }
+{{ - include "common.itsumi.services.tpl" . }}
 ```
 
 ```yaml
 # templates/jobs.yaml
-{ { - include "common.itsumi.jobs.tpl" . } }
+{{ - include "common.itsumi.jobs.tpl" . }}
 ```
 
 ```yaml
 # templates/hpas.yaml
-{ { - include "common.itsumi.hpas.tpl" . } }
+{{ - include "common.itsumi.hpas.tpl" . }}
 ```
 
 ## Starter Chart
