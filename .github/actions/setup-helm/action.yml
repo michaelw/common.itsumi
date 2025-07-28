@@ -1,14 +1,14 @@
-name: 'Setup Helm'
-description: 'Set up Helm with the standard version used across all workflows'
+name: "Setup Helm"
+description: "Set up Helm with the standard version used across all workflows"
 
 inputs:
   version:
-    description: 'Helm version to install'
+    description: "Helm version to install"
     required: false
-    default: 'v3.18.4'
+    default: "v3.18.4"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Set up Helm
       uses: azure/setup-helm@v4

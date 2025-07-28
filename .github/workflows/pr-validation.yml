@@ -26,26 +26,26 @@ jobs:
           # Get the current version from Chart.yaml
           CURRENT_VERSION=$(grep '^version:' Chart.yaml | awk '{print $2}')
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
-          
+
           # Check if version follows semantic versioning
           if [[ ! $CURRENT_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9-]+)?(\+[a-zA-Z0-9-]+)?$ ]]; then
             echo "❌ Chart version $CURRENT_VERSION does not follow semantic versioning"
             exit 1
           fi
-          
+
           echo "✅ Chart version $CURRENT_VERSION is valid"
 
       - name: Check for breaking changes
         run: |
           # Compare with main branch to detect potential breaking changes
           git fetch origin main
-          
+
           # Check if any template files were modified
           if git diff --name-only origin/main...HEAD | grep -E '^templates/.*\.tpl$'; then
             echo "🔍 Template files modified - manual review recommended"
             echo "::warning::Template files have been modified. Please ensure backward compatibility."
           fi
-          
+
           # Check if Chart.yaml dependencies changed
           if git diff origin/main...HEAD Chart.yaml | grep -E '^\+.*version:|^\-.*version:'; then
             echo "🔍 Dependencies modified"
@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "🔍 Checking template syntax..."
           # Verify all template helpers are properly defined
-          for helper in $(grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u); do
+          grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u | while read -r helper; do
             echo "Checking helper: $helper"
             if ! grep -r "$helper" templates/; then
               echo "❌ Helper $helper mentioned in README but not found in templates"
@@ -74,15 +74,17 @@ jobs:
 
       - name: Generate test report
         run: |
-          echo "## 📊 Chart Validation Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### ✅ Validations Passed" >> $GITHUB_STEP_SUMMARY
-          echo "- Chart version format is valid" >> $GITHUB_STEP_SUMMARY
-          echo "- Chart linting passed" >> $GITHUB_STEP_SUMMARY
-          echo "- Template syntax validation passed" >> $GITHUB_STEP_SUMMARY
-          echo "- All template helpers are properly defined" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📋 Chart Information" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: \`${{ steps.version_check.outputs.current_version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Type**: Library Chart" >> $GITHUB_STEP_SUMMARY
-          echo "- **Dependencies**: Bitnami Common Library" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## 📊 Chart Validation Report"
+            echo ""
+            echo "### ✅ Validations Passed"
+            echo "- Chart version format is valid"
+            echo "- Chart linting passed"
+            echo "- Template syntax validation passed"
+            echo "- All template helpers are properly defined"
+            echo ""
+            echo "### 📋 Chart Information"
+            echo "- **Version**: \`${{ steps.version_check.outputs.current_version }}\`"
+            echo "- **Type**: Library Chart"
+            echo "- **Dependencies**: Bitnami Common Library"
+          } >> "$GITHUB_STEP_SUMMARY"

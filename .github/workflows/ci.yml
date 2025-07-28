@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   lint-and-test:
@@ -28,7 +28,7 @@ jobs:
         run: |
           echo "🔍 Validating template helpers..."
           # Check that all helpers mentioned in README exist in templates
-          for helper in $(grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u); do
+          grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u | while read -r helper; do
             echo "Checking helper: $helper"
             if ! grep -r "$helper" templates/; then
               echo "❌ Helper $helper mentioned in README but not found in templates"
@@ -47,7 +47,7 @@ jobs:
         run: |
           # Check if all template helpers mentioned in README exist
           echo "Validating template helpers..."
-          for helper in $(grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u); do
+          grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u | while read -r helper; do
             echo "Checking helper: $helper"
             if ! grep -r "$helper" templates/; then
               echo "❌ Helper $helper mentioned in README but not found in templates"

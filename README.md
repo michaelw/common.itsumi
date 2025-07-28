@@ -45,14 +45,16 @@ This chart provides common template helpers and Kubernetes resource templates th
 ## Features
 
 ### Core Resource Templates
+
 - **Deployments**: Comprehensive deployment templates with multi-container support
-- **Services**: Service templates with advanced configuration options  
+- **Services**: Service templates with advanced configuration options
 - **ConfigMaps**: Configuration management with template rendering
 - **Secrets**: Secret management with multiple data formats
 - **Jobs**: Job templates for maintenance tasks and migrations
 - **HPA**: Horizontal Pod Autoscaler with advanced scaling behaviors
 
 ### Advanced Features
+
 - **Argo Rollouts**: Progressive delivery with canary and blue-green deployments
 - **Gateway API**: HTTP Routes and gRPC Routes for modern traffic management
 - **Ingress**: Traditional Kubernetes Ingress with comprehensive TLS support
@@ -60,6 +62,7 @@ This chart provides common template helpers and Kubernetes resource templates th
 - **Extra Objects**: Deploy arbitrary Kubernetes resources alongside standard templates
 
 ### Template Helpers
+
 All helpers from the [Bitnami common library](https://github.com/bitnami/charts/tree/main/bitnami/common) are available, plus additional functionality specific to this library.
 
 ## Global Configuration
@@ -73,6 +76,7 @@ The library supports global image registry configuration that allows you to over
 - **Development environments**: Use a local registry for testing
 
 **Configuration:**
+
 ```yaml
 global:
   # Global registry prepended to all image names
@@ -80,60 +84,64 @@ global:
 ```
 
 **How it works:**
+
 - If an individual image has a `registry` field set, it is prepended to the image repository name
 - The `global.imageRegistry` is prepended to all image repository names, it takes precedence over the individual settings
 - The global configuration is passed to the Bitnami `common.images.image` helper which handles the registry logic
 
 **Examples:**
 
-1. **Use internal registry for all images:**
-```yaml
-global:
-  imageRegistry: "registry.example.com"
+- **Use internal registry for all images:**
 
-image:
-  repository: "myapp/web"  # Results in: registry.example.com/myapp/web
-  tag: "v1.0.0"
+  ```yaml
+  global:
+    imageRegistry: "registry.example.com"
 
-deployments:
-  api:
-    image:
-      repository: "myapp/api"  # Results in: registry.example.com/myapp/api
-      tag: "v1.0.0"
-  worker:
-    image:
-      repository: "myapp/worker"  # Results in: registry.example.com/myapp/worker
-      tag: "v1.0.0"
-```
+  image:
+    repository: "myapp/web" # Results in: registry.example.com/myapp/web
+    tag: "v1.0.0"
 
-2. **Override registry for specific images:**
-```yaml
-global:
-  imageRegistry: "internal-registry.com"
+  deployments:
+    api:
+      image:
+        repository: "myapp/api" # Results in: registry.example.com/myapp/api
+        tag: "v1.0.0"
+    worker:
+      image:
+        repository: "myapp/worker" # Results in: registry.example.com/myapp/worker
+        tag: "v1.0.0"
+  ```
 
-image:
-  repository: "myapp/web"  # Uses: internal-registry.com/myapp/web
-  tag: "v1.0.0"
+- **Override registry for specific images:**
 
-deployments:
-  api:
-    image:
-      registry: "external-registry.com"  # Override: STILL uses internal-registry.com
-      repository: "myapp/api"  # Results in: internal-registry.com/myapp/api
-      tag: "v1.0.0"
-```
+  ```yaml
+  global:
+    imageRegistry: "internal-registry.com"
 
-3. **Development environment example:**
-```yaml
-global:
-  imageRegistry: "localhost:5000"
+  image:
+    repository: "myapp/web" # Uses: internal-registry.com/myapp/web
+    tag: "v1.0.0"
 
-# All images will use localhost:5000 registry unless overridden
-```
+  deployments:
+    api:
+      image:
+        registry: "external-registry.com" # Override: STILL uses internal-registry.com
+        repository: "myapp/api" # Results in: internal-registry.com/myapp/api
+        tag: "v1.0.0"
+  ```
+
+- **Development environment example:**
+
+  ```yaml
+  global:
+    imageRegistry: "localhost:5000"
+  # All images will use localhost:5000 registry unless overridden
+  ```
 
 **Supported Image Locations:**
+
 - Main deployment containers
-- Multiple deployment containers  
+- Multiple deployment containers
 - Init containers
 - Sidecar containers
 - Job containers
@@ -163,11 +171,11 @@ dependencies:
 ```yaml
 # values.yaml
 global:
-  imageRegistry: "registry.example.com"  # All images will use this registry
+  imageRegistry: "registry.example.com" # All images will use this registry
 
 replicaCount: 3
 image:
-  repository: mycompany/myapp  # Results in: registry.example.com/mycompany/myapp
+  repository: mycompany/myapp # Results in: registry.example.com/mycompany/myapp
   tag: v1.0.0
   pullPolicy: IfNotPresent
 
@@ -190,17 +198,17 @@ ingress:
 
 ```yaml
 # templates/deployments.yaml
-{{- include "common.itsumi.deployments.tpl" . }}
+{ { - include "common.itsumi.deployments.tpl" . } }
 ```
 
 ```yaml
 # templates/services.yaml
-{{- include "common.itsumi.services.tpl" . }}
+{ { - include "common.itsumi.services.tpl" . } }
 ```
 
 ```yaml
 # templates/ingresses.yaml
-{{- include "common.itsumi.ingresses.tpl" . }}
+{ { - include "common.itsumi.ingresses.tpl" . } }
 ```
 
 ### Microservices Architecture
@@ -210,16 +218,16 @@ Deploy multiple components with different configurations:
 ```yaml
 # values.yaml
 global:
-  imageRegistry: "registry.example.com"  # All images use company registry
+  imageRegistry: "registry.example.com" # All images use company registry
 
 deployments:
   enabled: true
-  
+
   web:
     enabled: true
     replicaCount: 3
     image:
-      repository: myapp/web  # Results in: registry.example.com/myapp/web
+      repository: myapp/web # Results in: registry.example.com/myapp/web
       tag: v1.0.0
     ports:
       http:
@@ -234,7 +242,7 @@ deployments:
     enabled: true
     replicaCount: 2
     image:
-      repository: myapp/api  # Results in: registry.example.com/myapp/api
+      repository: myapp/api # Results in: registry.example.com/myapp/api
       tag: v1.0.0
     ports:
       http:
@@ -244,7 +252,7 @@ deployments:
     enabled: true
     replicaCount: 5
     image:
-      repository: myapp/worker  # Results in: registry.example.com/myapp/worker
+      repository: myapp/worker # Results in: registry.example.com/myapp/worker
       tag: v1.0.0
     command:
       - bundle
@@ -280,22 +288,22 @@ jobs:
 
 ```yaml
 # templates/deployments.yaml
-{{- include "common.itsumi.deployments.tpl" . }}
+{ { - include "common.itsumi.deployments.tpl" . } }
 ```
 
 ```yaml
 # templates/services.yaml
-{{- include "common.itsumi.services.tpl" . }}
+{ { - include "common.itsumi.services.tpl" . } }
 ```
 
 ```yaml
 # templates/jobs.yaml
-{{- include "common.itsumi.jobs.tpl" . }}
+{ { - include "common.itsumi.jobs.tpl" . } }
 ```
 
 ```yaml
 # templates/hpas.yaml
-{{- include "common.itsumi.hpas.tpl" . }}
+{ { - include "common.itsumi.hpas.tpl" . } }
 ```
 
 ## Starter Chart
@@ -311,6 +319,7 @@ helm template test-service
 ```
 
 The starter chart includes templates for:
+
 - Deployments
 - Services
 - Ingress and HTTPRoutes/GRPCRoutes
@@ -325,11 +334,12 @@ The following table lists the template helpers available in this library:
 
 ### Deployment Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper                 | Description          | Usage                                             |
+| ------------------------------- | -------------------- | ------------------------------------------------- |
 | `common.itsumi.deployments.tpl` | Deployments template | `{{ include "common.itsumi.deployments.tpl" . }}` |
 
 **Expected Input for default deployment:**
+
 ```yaml
 replicaCount: 3
 image:
@@ -352,6 +362,7 @@ resources:
 ```
 
 **Expected Input for multiple deployments:**
+
 ```yaml
 deployments:
   default:
@@ -378,11 +389,12 @@ deployments:
 
 ### Service Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper              | Description       | Usage                                          |
+| ---------------------------- | ----------------- | ---------------------------------------------- |
 | `common.itsumi.services.tpl` | Services template | `{{ include "common.itsumi.services.tpl" . }}` |
 
 **Expected Input for default service:**
+
 ```yaml
 service:
   type: ClusterIP
@@ -394,11 +406,12 @@ service:
 ```
 
 **Expected Input for multiple services:**
+
 ```yaml
 services:
   enabled: true
   default:
-    enabled: false    
+    enabled: false
   web:
     type: ClusterIP
     ports:
@@ -419,11 +432,12 @@ services:
 
 ### ConfigMap Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper                | Description         | Usage                                            |
+| ------------------------------ | ------------------- | ------------------------------------------------ |
 | `common.itsumi.configmaps.tpl` | ConfigMaps template | `{{ include "common.itsumi.configmaps.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 configMaps:
   app-config:
@@ -449,11 +463,12 @@ configMaps:
 
 ### Secret Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper             | Description      | Usage                                         |
+| --------------------------- | ---------------- | --------------------------------------------- |
 | `common.itsumi.secrets.tpl` | Secrets template | `{{ include "common.itsumi.secrets.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 secrets:
   app-secrets:
@@ -473,11 +488,12 @@ secrets:
 
 ### Job Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper          | Description   | Usage                                      |
+| ------------------------ | ------------- | ------------------------------------------ |
 | `common.itsumi.jobs.tpl` | Jobs template | `{{ include "common.itsumi.jobs.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 jobs:
   migration:
@@ -505,11 +521,12 @@ jobs:
 
 ### HPA Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper          | Description   | Usage                                      |
+| ------------------------ | ------------- | ------------------------------------------ |
 | `common.itsumi.hpas.tpl` | HPAs template | `{{ include "common.itsumi.hpas.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 autoscaling:
   enabled: true
@@ -545,11 +562,12 @@ autoscaling:
 
 ### Ingress Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper               | Description        | Usage                                           |
+| ----------------------------- | ------------------ | ----------------------------------------------- |
 | `common.itsumi.ingresses.tpl` | Ingresses template | `{{ include "common.itsumi.ingresses.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 ingress:
   enabled: true
@@ -575,12 +593,13 @@ ingress:
 
 ### Gateway API Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper                | Description                  | Usage                                            |
+| ------------------------------ | ---------------------------- | ------------------------------------------------ |
 | `common.itsumi.httproutes.tpl` | Multiple HTTPRoutes template | `{{ include "common.itsumi.httproutes.tpl" . }}` |
 | `common.itsumi.grpcroutes.tpl` | Multiple GRPCRoutes template | `{{ include "common.itsumi.grpcroutes.tpl" . }}` |
 
 **Expected Input for HTTPRoute:**
+
 ```yaml
 httpRoutes:
   api:
@@ -605,11 +624,12 @@ httpRoutes:
 
 ### Argo Rollouts Templates
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper              | Description                | Usage                                          |
+| ---------------------------- | -------------------------- | ---------------------------------------------- |
 | `common.itsumi.rollouts.tpl` | Multiple Rollouts template | `{{ include "common.itsumi.rollouts.tpl" . }}` |
 
 **Expected Input:**
+
 ```yaml
 rollouts:
   web:
@@ -643,11 +663,12 @@ rollouts:
 
 ### Extra Objects Template
 
-| Template Helper | Description | Usage |
-|-----------------|-------------|-------|
+| Template Helper              | Description                         | Usage                                          |
+| ---------------------------- | ----------------------------------- | ---------------------------------------------- |
 | `common.itsumi.extraObjects` | Render arbitrary Kubernetes objects | `{{ include "common.itsumi.extraObjects" . }}` |
 
 **Expected Input:**
+
 ```yaml
 extraObjects:
   - |
@@ -675,6 +696,7 @@ extraObjects:
 ## Best Practices
 
 ### Configuration Structure
+
 ```yaml
 # Single resource pattern
 service:
@@ -682,7 +704,7 @@ service:
   type: ClusterIP
   # ... other config
 
-# Multiple resources pattern  
+# Multiple resources pattern
 services:
   enabled: true
   web:
@@ -696,11 +718,13 @@ services:
 ```
 
 ### Resource Naming
+
 - Resources are automatically named using `common.names.fullname`
 - For multiple resources, the resource key is appended: `{fullname}-{resourceKey}`
 - Use `useFullname: true` in resource config to override this behavior
 
 ### Template Inheritance
+
 - Most pod templates support inheritance from deployment configurations
 - Use `inheritFrom: <deployment name>` in job configurations to inherit settings
 - Override specific values as needed while maintaining consistency
@@ -708,6 +732,7 @@ services:
 ## Advanced Configuration
 
 ### Custom Labels and Annotations
+
 All templates support custom labels and annotations:
 
 ```yaml
@@ -723,6 +748,7 @@ deployment:
 ```
 
 ### Security Contexts
+
 Configure security at pod and container levels:
 
 ```yaml
@@ -740,6 +766,7 @@ securityContext:
 ```
 
 ### Volume Management
+
 Support for various volume types:
 
 ```yaml
@@ -780,6 +807,7 @@ volumeMounts:
 4. **Dependency issues**: Run `helm dependency update` after modifying Chart.yaml
 
 ### Debug Templates
+
 Use Helm's template debugging features:
 
 ```bash

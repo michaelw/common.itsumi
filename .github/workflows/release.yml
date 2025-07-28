@@ -38,21 +38,29 @@ jobs:
           # Extract version from tag (remove 'v' prefix if present)
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION=${VERSION#v}
-          
+
           # Extract chart name from Chart.yaml
           CHART_NAME=$(grep '^name:' Chart.yaml | awk '{print $2}')
-          
+
           # Build package filename
           PACKAGE_FILE="${CHART_NAME}-${VERSION}.tgz"
-          
+
           # Update Chart.yaml version to match the release tag
           sed -i "s/^version:.*/version: $VERSION/" Chart.yaml
-          
+
+          # Update starter template dependency version to match
+          awk '/name: common\.itsumi/{flag=1} flag && /version:/{gsub(/version: [0-9]+\.[0-9]+\.[0-9]+/, "version: '"$VERSION"'")} /repository:/{flag=0} 1' starter-template/Chart.yaml.jinja > temp && mv temp starter-template/Chart.yaml.jinja
+
+          # Clean up old chart packages in starter template
+          rm -f starter-template/charts/*.tgz
+
           # Set outputs for later steps
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "chart_name=$CHART_NAME" >> "$GITHUB_OUTPUT"
-          echo "package_file=$PACKAGE_FILE" >> "$GITHUB_OUTPUT"
-          
+          {
+            echo "version=$VERSION"
+            echo "chart_name=$CHART_NAME"
+            echo "package_file=$PACKAGE_FILE"
+          } >> "$GITHUB_OUTPUT"
+
           # Display information
           echo "📋 Release Information:"
           echo "  Chart name: $CHART_NAME"
@@ -65,7 +73,7 @@ jobs:
           # Update chart dependencies
           echo "🔄 Updating chart dependencies..."
           helm dependency update
-          
+
           # Validate the chart
           echo "🔍 Validating chart..."
           helm lint .
@@ -75,20 +83,20 @@ jobs:
         run: |
           # Package the chart
           helm package .
-          
+
           # Verify the expected package was created
           EXPECTED_PACKAGE="${{ steps.chart_info.outputs.package_file }}"
           if [[ ! -f "$EXPECTED_PACKAGE" ]]; then
             echo "❌ Expected package file $EXPECTED_PACKAGE not found!"
             echo "Available files:"
-            ls -la *.tgz 2>/dev/null || echo "No .tgz files found"
+            ls -la ./*.tgz 2>/dev/null || echo "No .tgz files found"
             exit 1
           fi
-          
+
           echo "✅ Package created: $EXPECTED_PACKAGE"
-          
+
           # Push to GHCR using OCI format
           helm push "$EXPECTED_PACKAGE" oci://ghcr.io/${{ github.repository_owner }}
-          
+
           echo "✅ Chart successfully published to ghcr.io/${{ github.repository_owner }}/${{ steps.chart_info.outputs.chart_name }}:${{ steps.chart_info.outputs.version }}"
           echo "📚 Installation instructions available in README.md"

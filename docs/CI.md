@@ -5,11 +5,13 @@
 This library chart uses GitHub Actions for continuous integration and deployment:
 
 - **CI Workflow**: Runs on every pull request and push to main/master
+
   - Lints and validates the chart
   - Tests template rendering
   - Validates documentation consistency
-  
+
 - **Release Workflow**: Automatically publishes to GHCR on GitHub releases
+
   - Packages the chart as an OCI artifact
   - Publishes to `ghcr.io/michaelw/common.itsumi`
 
