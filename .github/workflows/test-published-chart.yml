@@ -1,10 +1,8 @@
 name: Test Published Chart
 
 on:
-  workflow_run:
-    workflows: ["Semantic Release"]
-    types: [completed]
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -15,7 +13,6 @@ on:
 jobs:
   test-published-chart:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,12 +30,13 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
           else
-            # For workflow_run trigger, get the version from the head branch tag
-            VERSION="${{ github.event.workflow_run.head_branch }}"
-            if [[ $VERSION == refs/tags/* ]]; then
-              VERSION=${VERSION#refs/tags/}
-            fi
+            # For release trigger, get version from the release tag
+            VERSION="${{ github.event.release.tag_name }}"
+
+            # Remove 'v' prefix if present
             VERSION=${VERSION#v}
+
+            echo "📋 Release version: $VERSION"
             echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           fi
 
