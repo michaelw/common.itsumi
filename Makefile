@@ -35,7 +35,6 @@ package: deps lint ## Package the chart
 clean: ## Clean generated files
 	@echo "🧹 Cleaning up..."
 	rm -f $(CHART_NAME)-*.tgz
-	rm -f /tmp/$(CHART_NAME)-*.yaml
 	rm -rf charts/
 	@echo "✅ Cleanup completed"
 
