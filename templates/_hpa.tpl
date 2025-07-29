@@ -15,6 +15,12 @@ Usage:
     {{- $fullName = printf "%s-%s" $fullName $deploymentName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($deploymentName | default "default")
+    )
+}}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -24,7 +30,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- include "common.labels.standard" $labelContext | nindent 4 }}
     {{- with $hpaConfig.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

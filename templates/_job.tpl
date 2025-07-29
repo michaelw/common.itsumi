@@ -20,6 +20,12 @@ Usage: {{ include "common.itsumi.job.tpl" (dict "root" $ "name" $name "jobConfig
     {{- $fullName = printf "%s-%s" $fullName $jobName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($jobName | default "default")
+    )
+}}
 apiVersion: {{ include "common.capabilities.job.apiVersion" $root }}
 kind: Job
 metadata:
@@ -33,7 +39,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- include "common.labels.standard" $labelContext | nindent 4 }}
     {{- with .labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -77,7 +83,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.labels.matchLabels" $root | nindent 8 }}
+        {{- include "common.itsumi.labels.matchLabels" $labelContext | nindent 8 }}
         {{- with (.podLabels | default $inheritedCtx.podLabels) }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

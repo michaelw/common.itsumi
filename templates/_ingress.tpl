@@ -14,6 +14,12 @@ Usage:
     {{- $fullName = printf "%s-%s" $fullName $ingressName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($ingressName | default "default")
+    )
+}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -23,7 +29,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- include "common.labels.standard" $labelContext | nindent 4 }}
     {{- with $ingressConfig.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

@@ -17,6 +17,12 @@ Usage: {{ include "common.itsumi.deployments.tpl" (dict "root" $ "name" $name "d
     {{- $fullName = printf "%s-%s" $fullName $deploymentName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($deploymentName | default "default")
+    )
+}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" $root }}
 kind: Deployment
 metadata:
@@ -25,7 +31,7 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  labels: {{- include "common.labels.standard" $root | nindent 4 }}
+  labels: {{- include "common.labels.standard" $labelContext | nindent 4 }}
 spec:
   {{- if not (.autoscaling).enabled }}
   replicas: {{ .replicaCount | default 1 }}
@@ -44,7 +50,7 @@ spec:
   minReadySeconds: {{ . }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $root | nindent 6 }}
+    matchLabels: {{- include "common.itsumi.labels.matchLabels" $labelContext | nindent 6 }}
   template:
     metadata:
       {{- with .podAnnotations }}
@@ -52,7 +58,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.labels.matchLabels" $root | nindent 8 }}
+        {{- include "common.itsumi.labels.matchLabels" $labelContext | nindent 8 }}
         {{- with .podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

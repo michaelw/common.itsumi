@@ -14,6 +14,12 @@ Usage:
     {{- $fullName = printf "%s-%s" $fullName $secretName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($secretName | default "default")
+    )
+}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -23,7 +29,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- include "common.labels.standard" $labelContext | nindent 4 }}
     {{- with $secretConfig.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

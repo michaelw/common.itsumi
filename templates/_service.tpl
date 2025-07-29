@@ -11,6 +11,12 @@ common.itsumi.service.tpl
   {{- $fullName = printf "%s-%s" $fullName $svcName }}
   {{- end }}
 {{- end }}
+{{- $labelContext := dict
+    "context" $root
+    "customLabels" (dict
+      "app.kubernetes.io/component" ($svcName | default "default")
+    )
+}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +26,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- include "common.labels.standard" $labelContext | nindent 4 }}
     {{- if $svcName }}
     service.name: {{ $svcName }}
     {{- end }}
@@ -109,7 +115,7 @@ spec:
   {{- end }}
   {{- if not (eq $svcConfig.type "ExternalName") }}
   selector:
-    {{- include "common.labels.matchLabels" $root | nindent 4 }}
+    {{- include "common.itsumi.labels.matchLabels" $labelContext | nindent 4 }}
     {{- with $svcConfig.selector }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
