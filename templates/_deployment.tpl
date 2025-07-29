@@ -468,7 +468,7 @@ Expects .Values.deployments to be a dictionary of deployment configurations
 {{- end }}
 {{- if $isEnabled }}
 ---
-{{- include "common.itsumi.deployment.tpl" (dict "root" $ ".name" $deploymentName "deployments" $deployments) }}
+{{- include "common.itsumi.deployment.tpl" (dict "root" $ "name" $deploymentName "deployments" $deployments) }}
 {{- end }}
 {{- end }}
 {{- end }}
