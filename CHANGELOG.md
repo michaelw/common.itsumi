@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/michaelw/common.itsumi/compare/v0.2.2...v0.2.3) (2025-07-29)
+
+
+### Bug Fixes
+
+* update mount name handling in job template ([af7bc70](https://github.com/michaelw/common.itsumi/commit/af7bc7090ea5cbdaccd258851ab1bb69aa1e8b5c))
+
 ## [0.2.2](https://github.com/michaelw/common.itsumi/compare/v0.2.1...v0.2.2) (2025-07-29)
 
 
