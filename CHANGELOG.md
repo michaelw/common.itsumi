@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/michaelw/common.itsumi/compare/v0.2.0...v0.2.1) (2025-07-29)
+
+
+### Bug Fixes
+
+* standardize label handling in ConfigMap, Deployment, Job, and Secret templates ([346b91b](https://github.com/michaelw/common.itsumi/commit/346b91bc9e4906935ee2dc4f69cb3983abd1df45))
+
 # [0.2.0](https://github.com/michaelw/common.itsumi/compare/v0.1.8...v0.2.0) (2025-07-28)
 
 
