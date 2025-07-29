@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/michaelw/common.itsumi/compare/v0.2.4...v0.3.0) (2025-07-29)
+
+
+### Features
+
+* add support for sidecar initContainers ([fa6165c](https://github.com/michaelw/common.itsumi/commit/fa6165c5f971ec48a3e00684f8143fe6b41af99f))
+
 ## [0.2.4](https://github.com/michaelw/common.itsumi/compare/v0.2.3...v0.2.4) (2025-07-29)
 
 
