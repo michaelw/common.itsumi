@@ -8,7 +8,7 @@ Usage: {{ include "common.itsumi.job.tpl" (dict "root" $ "name" $name "jobConfig
 {{- $_ := $root.Release | required "E: .Release is required" }}
 {{- $_ := $root.Values | required "E: .Values is required" }}
 {{- $allDeployments := .deployments | required "E: .deployments is required" }}
-{{- $jobName := eq "default" .jobName | ternary nil .jobName | default "" }}
+{{- $jobName := eq "default" .name | ternary nil .name | default "" }}
 {{- with .jobConfig }}
 {{- $fullName := include "common.names.fullname" $root }}
 {{- $inheritedCtx := dict }}

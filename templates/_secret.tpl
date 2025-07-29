@@ -22,10 +22,11 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with $secretConfig.labels }}
   labels:
+    {{- include "common.labels.standard" $root | nindent 4 }}
+    {{- with $secretConfig.labels }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
   {{- with $secretConfig.namespace }}
   namespace: {{ . }}
   {{- end }}

@@ -8,7 +8,7 @@ Usage: {{ include "common.itsumi.deployments.tpl" (dict "root" $ "name" $name "d
 {{- $_ := $root.Release | required "E: .Release is required" }}
 {{- $_ := $root.Values | required "E: .Values is required" }}
 {{- $allDeployments := .deployments | required "E: .deployments is required" }}
-{{- $deploymentName := eq "default" .deploymentName | ternary nil .deploymentName | default "" }}
+{{- $deploymentName := eq "default" .name | ternary nil .name | default "" }}
 {{- $deploymentConfig := $allDeployments | dig ($deploymentName | default "default") nil | required (printf "E: deployments.%s does not exist") }}
 {{- with $deploymentConfig }}
 {{- $fullName := include "common.names.fullname" $root }}
