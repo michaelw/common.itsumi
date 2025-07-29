@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/michaelw/common.itsumi/compare/v0.3.0...v0.3.1) (2025-07-29)
+
+
+### Bug Fixes
+
+* add custom labels context to deployment, HPA, ingress, job, secret, and service templates ([48014b3](https://github.com/michaelw/common.itsumi/commit/48014b3f53877d5a689c5dc8cbf04d1a88bcd6ad))
+* auto-generate namespaced volume references, with override option ([50ca465](https://github.com/michaelw/common.itsumi/commit/50ca4658e8462623d97d0f672589e4927e193975))
+* update backendRefs name handling in GRPCRoute and HTTPRoute templates ([2876fa7](https://github.com/michaelw/common.itsumi/commit/2876fa7019ec926bd827ec14469f18bbb332f126))
+
 # [0.3.0](https://github.com/michaelw/common.itsumi/compare/v0.2.4...v0.3.0) (2025-07-29)
 
 
