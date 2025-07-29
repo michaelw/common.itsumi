@@ -206,7 +206,11 @@ spec:
       {{- if $ruleConfig.backendRefs }}
       backendRefs:
         {{- range $backendName, $backendConfig := $ruleConfig.backendRefs }}
-        - name: {{ $backendConfig.name }}
+        {{- $backendFullName := include "common.names.fullname" $root }}
+        {{- if ne "default" $backendName }}
+          {{- $backendFullName = printf "%s-%s" $backendFullName $backendName }}
+        {{- end }}
+        - name: {{ $backendConfig.name | default $backendFullName }}
           {{- with $backendConfig.namespace }}
           namespace: {{ . }}
           {{- end }}
