@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/michaelw/common.itsumi/compare/v0.2.1...v0.2.2) (2025-07-29)
+
+
+### Bug Fixes
+
+* set default name for mount in job template ([164b0ff](https://github.com/michaelw/common.itsumi/commit/164b0ff7c2e339e7ef6928ccda32d27ea8c14055))
+
 ## [0.2.1](https://github.com/michaelw/common.itsumi/compare/v0.2.0...v0.2.1) (2025-07-29)
 
 
