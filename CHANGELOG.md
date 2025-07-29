@@ -1,3 +1,10 @@
+## [0.2.4](https://github.com/michaelw/common.itsumi/compare/v0.2.3...v0.2.4) (2025-07-29)
+
+
+### Bug Fixes
+
+* correct variable reference in deployment template inclusion ([398af22](https://github.com/michaelw/common.itsumi/commit/398af2273089b48b1024e952ec1b282cd3daf177))
+
 ## [0.2.3](https://github.com/michaelw/common.itsumi/compare/v0.2.2...v0.2.3) (2025-07-29)
 
 
