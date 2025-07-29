@@ -207,7 +207,7 @@ spec:
               {{- $isMountEnabled = $mount.enabled }}
             {{- end }}
             {{- if $isMountEnabled }}
-            - name: {{ $mountName | default $name }}
+            - name: {{ $mount.name | default $mountName }}
               mountPath: {{ $mount.mountPath }}
               {{- with $mount.subPath }}
               subPath: {{ . }}
