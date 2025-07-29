@@ -414,31 +414,39 @@ spec:
         {{- end }}
         {{- if $isEnabled }}
         - name: {{ $name }}
-          {{- if $volume.configMap }}
+          {{- if hasKey $volume "configMap" }}
           configMap:
-            {{- toYaml $volume.configMap | nindent 12 }}
-          {{- else if $volume.secret }}
+            {{- $configMapName := include "common.names.fullname" $root }}
+            {{- if ne "default" $name }}
+              {{- $configMapName = printf "%s-%s" $configMapName $name }}
+            {{- end }}
+            {{- toYaml (merge (dict "name" ($volume.configMap.name | default $configMapName)) $volume.configMap) | nindent 12 }}
+          {{- else if hasKey $volume "secret" }}
           secret:
-            {{- toYaml $volume.secret | nindent 12 }}
-          {{- else if $volume.persistentVolumeClaim }}
+            {{- $secretName := include "common.names.fullname" $root }}
+            {{- if ne "default" $name }}
+              {{- $secretName = printf "%s-%s" $secretName $name }}
+            {{- end }}
+            {{- toYaml (merge (dict "secretName" ($volume.secret.secretName | default $secretName)) $volume.secret) | nindent 12 }}
+          {{- else if hasKey $volume "persistentVolumeClaim" }}
           persistentVolumeClaim:
             {{- toYaml $volume.persistentVolumeClaim | nindent 12 }}
-          {{- else if $volume.emptyDir }}
+          {{- else if hasKey $volume "emptyDir" }}
           emptyDir:
             {{- toYaml $volume.emptyDir | nindent 12 }}
-          {{- else if $volume.hostPath }}
+          {{- else if hasKey $volume "hostPath" }}
           hostPath:
             {{- toYaml $volume.hostPath | nindent 12 }}
-          {{- else if $volume.nfs }}
+          {{- else if hasKey $volume "nfs" }}
           nfs:
             {{- toYaml $volume.nfs | nindent 12 }}
-          {{- else if $volume.csi }}
+          {{- else if hasKey $volume "csi" }}
           csi:
             {{- toYaml $volume.csi | nindent 12 }}
-          {{- else if $volume.projected }}
+          {{- else if hasKey $volume "projected" }}
           projected:
             {{- toYaml $volume.projected | nindent 12 }}
-          {{- else if $volume.downwardAPI }}
+          {{- else if hasKey $volume "downwardAPI" }}
           downwardAPI:
             {{- toYaml $volume.downwardAPI | nindent 12 }}
           {{- else }}
