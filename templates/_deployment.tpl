@@ -149,6 +149,9 @@ spec:
           {{- with $imageRoot.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- with $container.restartPolicy }}{{/* do not inherit */}}
+          restartPolicy: {{ . }}
+          {{- end }}
           {{- with $container.command | default $inherited.command }}
           command:
             {{- toYaml . | nindent 12 }}
