@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/michaelw/common.itsumi/compare/v0.3.1...v0.3.2) (2025-08-01)
+
+
+### Bug Fixes
+
+* add support for custom restart policy in deployment template ([fbed4b8](https://github.com/michaelw/common.itsumi/commit/fbed4b80ed0077a69e485ce92eae5daec3a5563c))
+
 ## [0.3.1](https://github.com/michaelw/common.itsumi/compare/v0.3.0...v0.3.1) (2025-07-29)
 
 
