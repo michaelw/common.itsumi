@@ -263,7 +263,28 @@ spec:
           {{- with (.workingDir | default $inheritedCtx.workingDir) }}
           workingDir: {{ . }}
           {{- end }}
-          {{- /* no ports */}}
+          {{- with .ports }}{{/* do not inherit */}}
+          ports:
+            {{- range $name, $port := . }}
+            {{- $isEnabled := true }}
+            {{- if hasKey $port "enabled" }}
+              {{- $isEnabled = $port.enabled }}
+            {{- end }}
+            {{- if $isEnabled }}
+            - name: {{ $name }}
+              containerPort: {{ $port.containerPort }}
+              {{- with $port.protocol }}
+              protocol: {{ . }}
+              {{- end }}
+              {{- with $port.hostPort }}
+              hostPort: {{ . }}
+              {{- end }}
+              {{- with $port.hostIP }}
+              hostIP: {{ . }}
+              {{- end }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
           {{- if or (.env | default $inheritedCtx.env) (.envFrom | default $inheritedCtx.envFrom) }}
           {{- with (.env | default $inheritedCtx.env) }}
           env:

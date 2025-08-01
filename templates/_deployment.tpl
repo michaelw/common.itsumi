@@ -160,6 +160,31 @@ spec:
           args:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with $container.workingDir | default $inherited.workingDir }}
+          workingDir: {{ . }}
+          {{- end }}
+          {{- with $container.ports }}{{/* do not inherit */}}
+          ports:
+            {{- range $name, $port := . }}
+            {{- $isEnabled := true }}
+            {{- if hasKey $port "enabled" }}
+              {{- $isEnabled = $port.enabled }}
+            {{- end }}
+            {{- if $isEnabled }}
+            - name: {{ $name }}
+              containerPort: {{ $port.containerPort }}
+              {{- with $port.protocol }}
+              protocol: {{ . }}
+              {{- end }}
+              {{- with $port.hostPort }}
+              hostPort: {{ . }}
+              {{- end }}
+              {{- with $port.hostIP }}
+              hostIP: {{ . }}
+              {{- end }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
           {{- with $container.env | default $inherited.env }}
           env:
             {{- range $name, $value := . }}
