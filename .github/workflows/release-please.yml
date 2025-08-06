@@ -29,14 +29,16 @@ jobs:
 
       - name: Publish
         if: ${{ steps.release-please.outputs.release_created }}
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          make publish GITHUB_USERNAME="${{ github.actor }}"
+          make publish
 
       - name: Validate published chart
         if: ${{ steps.release-please.outputs.release_created }}
         run: |
-          # Get the version from Chart.yaml
-          VERSION="$(awk '/^version:/{print $2}' Chart.yaml)"
+          VERSION="${{ steps.release-please.outputs.version }}"
 
           # Only run validation if we have a version
           if [[ -z "$VERSION" ]]; then
