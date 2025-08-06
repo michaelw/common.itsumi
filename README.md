@@ -10,7 +10,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common.itsumi
-    version: 0.2.x
+    version: 0.4.x
     repository: oci://ghcr.io/michaelw
 ```
 
