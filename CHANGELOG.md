@@ -5,6 +5,13 @@
 
 * add support for initContainer ports in deployment and job templates ([aa17a01](https://github.com/michaelw/common.itsumi/commit/aa17a0197c0a2722d846c38348b75ea113b515c5))
 
+## [0.4.3](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.4.2...common.itsumi-v0.4.3) (2025-08-06)
+
+
+### Bug Fixes
+
+* **ci:** set GITHUB_USERNAME ([c9970ef](https://github.com/michaelw/common.itsumi/commit/c9970ef6aaedc03f05a3da442bfb6a9296b312f3))
+
 ## [0.4.2](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.4.1...common.itsumi-v0.4.2) (2025-08-06)
 
 
