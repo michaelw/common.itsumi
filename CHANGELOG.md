@@ -1,12 +1,4 @@
-## [0.3.3](https://github.com/michaelw/common.itsumi/compare/v0.3.2...v0.3.3) (2025-08-01)
-
-
-### Bug Fixes
-
-* add support for initContainer ports in deployment and job templates ([aa17a01](https://github.com/michaelw/common.itsumi/commit/aa17a0197c0a2722d846c38348b75ea113b515c5))
-
 ## [0.4.0](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.3.3...common.itsumi-v0.4.0) (2025-08-06)
-
 
 ### Features
 

@@ -54,8 +54,8 @@ list-templates: ## List all available templates
 # Publishing targets
 publish: package ## Publish to Container Registry
 	@echo "📤 Publishing to $(REGISTRY)..."
-	@echo "$$GITHUB_TOKEN" | helm registry login ghcr.io -u $$GITHUB_USERNAME --password-stdin
-	@helm push $(CHART_PACKAGE) oci://$(REGISTRY)
+	@echo "$(GITHUB_TOKEN)" | helm registry login ghcr.io -u "$(GITHUB_USERNAME)" --password-stdin
+	helm push $(CHART_PACKAGE) oci://$(REGISTRY)
 	@echo "✅ Published to $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
 
 version-bump: ## Bump chart version (usage: make version-bump VERSION=0.2.0)
