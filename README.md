@@ -1,7 +1,7 @@
 # common.itsumi Library Chart
 
 [![CI](https://github.com/michaelw/common.itsumi/actions/workflows/ci.yml/badge.svg)](https://github.com/michaelw/common.itsumi/actions/workflows/ci.yml)
-[![Release](https://github.com/michaelw/common.itsumi/actions/workflows/semantic-release.yml/badge.svg)](https://github.com/michaelw/common.itsumi/actions/workflows/semantic-release.yml)
+[![Release](https://github.com/michaelw/common.itsumi/actions/workflows/release-please.yml/badge.svg)](https://github.com/michaelw/common.itsumi/actions/workflows/release-please.yml)
 
 A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for grouping common logic and templates for Kubernetes applications.
 
@@ -10,7 +10,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common.itsumi
-    version: 0.4.x
+    version: 0.5.x
     repository: oci://ghcr.io/michaelw
 ```
 
