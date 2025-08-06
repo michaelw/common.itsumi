@@ -1,0 +1,63 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Please
+        id: release-please
+        uses: googleapis/release-please-action@v4
+
+      - name: Checkout
+        if: ${{ steps.release-please.outputs.release_created }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        if: ${{ steps.release-please.outputs.release_created }}
+        uses: ./.github/actions/setup-helm
+
+      - name: Publish
+        if: ${{ steps.release-please.outputs.release_created }}
+        run: |
+          make publish
+
+      - name: Validate published chart
+        if: ${{ steps.release-please.outputs.release_created }}
+        run: |
+          # Get the version from Chart.yaml
+          VERSION="$(awk '/^version:/{print $2}' Chart.yaml)"
+
+          # Only run validation if we have a version
+          if [[ -z "$VERSION" ]]; then
+            echo "ℹ️ No version found in Chart.yaml"
+            exit 1
+          fi
+
+          echo "🔍 Validating published chart version: $VERSION"
+          CHART_URL="oci://ghcr.io/${{ github.repository_owner }}/common.itsumi"
+
+          echo "🔍 Testing chart pull from GHCR..."
+          helm pull "${CHART_URL}" --version "${VERSION}"
+
+          echo "📦 Extracting and validating chart..."
+          tar -tf "common.itsumi-${VERSION}.tgz" | head -10
+
+          echo "🔍 Validating chart structure..."
+          helm show chart "${CHART_URL}" --version "${VERSION}"
+
+          echo "📋 Displaying chart values..."
+          helm show values "${CHART_URL}" --version "${VERSION}"
+
+          echo "✅ Chart $VERSION successfully validated!"
+          echo "✅ Pull from GHCR registry works correctly"
+          echo "✅ Chart structure and metadata are valid"
