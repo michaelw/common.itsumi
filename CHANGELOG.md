@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.5.0...common.itsumi-v0.5.1) (2025-08-06)
+
+
+### Bug Fixes
+
+* **docs:** update release badge in README ([fda6e33](https://github.com/michaelw/common.itsumi/commit/fda6e3318540e26af3c17d96b657a04123841cda))
+
 ## [0.5.0](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.4.3...common.itsumi-v0.5.0) (2025-08-06)
 
 ### Bug Fixes
