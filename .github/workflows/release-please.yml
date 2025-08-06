@@ -30,7 +30,7 @@ jobs:
       - name: Publish
         if: ${{ steps.release-please.outputs.release_created }}
         run: |
-          make publish
+          make publish GITHUB_USERNAME="${{ github.actor }}"
 
       - name: Validate published chart
         if: ${{ steps.release-please.outputs.release_created }}
