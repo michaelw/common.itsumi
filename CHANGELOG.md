@@ -37,7 +37,7 @@ Release Shenanigans
 * auto-generate namespaced volume references, with override option ([50ca465](https://github.com/michaelw/common.itsumi/commit/50ca4658e8462623d97d0f672589e4927e193975))
 * update backendRefs name handling in GRPCRoute and HTTPRoute templates ([2876fa7](https://github.com/michaelw/common.itsumi/commit/2876fa7019ec926bd827ec14469f18bbb332f126))
 
-# [0.3.0](https://github.com/michaelw/common.itsumi/compare/v0.2.4...v0.3.0) (2025-07-29)
+## [0.3.0](https://github.com/michaelw/common.itsumi/compare/v0.2.4...v0.3.0) (2025-07-29)
 
 
 ### Features
@@ -72,7 +72,7 @@ Release Shenanigans
 
 * standardize label handling in ConfigMap, Deployment, Job, and Secret templates ([346b91b](https://github.com/michaelw/common.itsumi/commit/346b91bc9e4906935ee2dc4f69cb3983abd1df45))
 
-# [0.2.0](https://github.com/michaelw/common.itsumi/compare/v0.1.8...v0.2.0) (2025-07-28)
+## [0.2.0](https://github.com/michaelw/common.itsumi/compare/v0.1.8...v0.2.0) (2025-07-28)
 
 
 ### Features

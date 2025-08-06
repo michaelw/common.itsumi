@@ -57,13 +57,3 @@ publish: package ## Publish to Container Registry
 	@echo "$(GITHUB_TOKEN)" | helm registry login ghcr.io -u "$(GITHUB_USERNAME)" --password-stdin
 	helm push $(CHART_PACKAGE) oci://$(REGISTRY)
 	@echo "✅ Published to $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
-
-version-bump: ## Bump chart version (usage: make version-bump VERSION=0.2.0)
-	@if [ -z "$(VERSION)" ]; then \
-		echo "❌ VERSION not specified. Usage: make version-bump VERSION=0.2.0"; \
-		exit 1; \
-	fi
-	@echo "📝 Bumping version to $(VERSION)..."
-	@sed -i -e 's/^version:.*/version: $(VERSION)/' Chart.yaml
-	@sed -i -e 's/^\( \+\)version:.*/\1version: $(VERSION)/' starter-template/Chart.yaml.jinja
-	@echo "✅ Version bumped to $(VERSION)"
