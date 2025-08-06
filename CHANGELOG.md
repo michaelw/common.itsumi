@@ -28,6 +28,38 @@
 * update mount name handling in job template ([af7bc70](https://github.com/michaelw/common.itsumi/commit/af7bc7090ea5cbdaccd258851ab1bb69aa1e8b5c))
 * **workflow:** update trigger to run on successful release completion ([d1d6ee3](https://github.com/michaelw/common.itsumi/commit/d1d6ee30e6914fda04a0f0a0ceb5663a7471770b))
 
+## [0.5.0](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.4.3...common.itsumi-v0.5.0) (2025-08-06)
+
+
+### Features
+
+* add support for sidecar initContainers ([fa6165c](https://github.com/michaelw/common.itsumi/commit/fa6165c5f971ec48a3e00684f8143fe6b41af99f))
+* update semantic release workflow and remove ORAS ([b5d5b7c](https://github.com/michaelw/common.itsumi/commit/b5d5b7ce6b6cbe606ecadee0a9f36a3057c7cd20))
+
+
+### Bug Fixes
+
+* add custom labels context to deployment, HPA, ingress, job, secret, and service templates ([48014b3](https://github.com/michaelw/common.itsumi/commit/48014b3f53877d5a689c5dc8cbf04d1a88bcd6ad))
+* add support for custom restart policy in deployment template ([fbed4b8](https://github.com/michaelw/common.itsumi/commit/fbed4b80ed0077a69e485ce92eae5daec3a5563c))
+* add support for initContainer ports in deployment and job templates ([aa17a01](https://github.com/michaelw/common.itsumi/commit/aa17a0197c0a2722d846c38348b75ea113b515c5))
+* auto-generate namespaced volume references, with override option ([50ca465](https://github.com/michaelw/common.itsumi/commit/50ca4658e8462623d97d0f672589e4927e193975))
+* **broken docs:** helm template mustaches ([5031ddb](https://github.com/michaelw/common.itsumi/commit/5031ddb68cf4685b753069cb8be713e2b97bb3f1))
+* **ci:** add release automation with release-please and update Chart.yaml version ([fb43314](https://github.com/michaelw/common.itsumi/commit/fb43314adf8aa3e7fd264ecd552dc174463ae24d))
+* **ci:** add release automation with release-please and update Chart.yaml version ([a6442bc](https://github.com/michaelw/common.itsumi/commit/a6442bc62bdec97c9945fbbd9df2e84d5aa8b818))
+* **ci:** remove failing template step ([6659018](https://github.com/michaelw/common.itsumi/commit/66590189655d971019281422d58e27f3a91e70ad))
+* correct release badge link in README.md ([5749731](https://github.com/michaelw/common.itsumi/commit/57497314c5f2d5b30045e271204b8bd972d8a99f))
+* correct variable reference in deployment template inclusion ([398af22](https://github.com/michaelw/common.itsumi/commit/398af2273089b48b1024e952ec1b282cd3daf177))
+* **docs:** test release flow ([5d2b78e](https://github.com/michaelw/common.itsumi/commit/5d2b78e715167ef894b1034b780a83ac87366415))
+* Makefile ([9a5eef8](https://github.com/michaelw/common.itsumi/commit/9a5eef8dd77324d99a84817d3c0a6f00ec9c73e8))
+* Makefile ([16f862d](https://github.com/michaelw/common.itsumi/commit/16f862dae9591af7f2b00bfbcc22a13de20fd285))
+* **release:** specify registry in chart push step for clarity ([3e29767](https://github.com/michaelw/common.itsumi/commit/3e29767e28f800f1f1eb7f444e2b717833e3da16))
+* set default name for mount in job template ([164b0ff](https://github.com/michaelw/common.itsumi/commit/164b0ff7c2e339e7ef6928ccda32d27ea8c14055))
+* standardize label handling in ConfigMap, Deployment, Job, and Secret templates ([346b91b](https://github.com/michaelw/common.itsumi/commit/346b91bc9e4906935ee2dc4f69cb3983abd1df45))
+* trigger semantic release ([baae3e2](https://github.com/michaelw/common.itsumi/commit/baae3e2cfc8a6e419c87e0178efd14befe6227e9))
+* update backendRefs name handling in GRPCRoute and HTTPRoute templates ([2876fa7](https://github.com/michaelw/common.itsumi/commit/2876fa7019ec926bd827ec14469f18bbb332f126))
+* update mount name handling in job template ([af7bc70](https://github.com/michaelw/common.itsumi/commit/af7bc7090ea5cbdaccd258851ab1bb69aa1e8b5c))
+* **workflow:** update trigger to run on successful release completion ([d1d6ee3](https://github.com/michaelw/common.itsumi/commit/d1d6ee30e6914fda04a0f0a0ceb5663a7471770b))
+
 ## [0.3.2](https://github.com/michaelw/common.itsumi/compare/v0.3.1...v0.3.2) (2025-08-01)
 
 
