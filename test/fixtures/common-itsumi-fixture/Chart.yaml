@@ -7,5 +7,5 @@ appVersion: "1.0.0"
 
 dependencies:
   - name: common.itsumi
-    version: 0.5.1
+    version: 0.5.2
     repository: file://../../..

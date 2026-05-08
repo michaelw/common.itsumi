@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.5.1...common.itsumi-v0.5.2) (2026-05-08)
+
+
+### Bug Fixes
+
+* align Helm chart release automation ([797d91a](https://github.com/michaelw/common.itsumi/commit/797d91ae7259d09dce04ccd937e6d1849fe6e60c))
+
 ## [0.5.1](https://github.com/michaelw/common.itsumi/compare/common.itsumi-v0.5.0...common.itsumi-v0.5.1) (2025-08-06)
 
 
