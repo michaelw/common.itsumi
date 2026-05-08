@@ -7,7 +7,12 @@
       "component": "common.itsumi",
       "include-component-in-tag": true,
       "extra-files": [
-        "starter-template/Chart.yaml.jinja"
+        "starter-template/Chart.yaml.jinja",
+        {
+          "type": "yaml",
+          "path": "test/fixtures/common-itsumi-fixture/Chart.yaml",
+          "jsonpath": "$.dependencies[0].version"
+        }
       ]
     }
   }
