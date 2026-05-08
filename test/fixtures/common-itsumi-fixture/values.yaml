@@ -1,0 +1,42 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/michaelw/common-itsumi-fixture
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+ports:
+  http:
+    containerPort: 8080
+
+service:
+  type: ClusterIP
+  ports:
+    http:
+      port: 80
+      targetPort: http
+      protocol: TCP
+
+configMaps:
+  app:
+    data:
+      app.yaml: |
+        mode: fixture
+
+secrets:
+  app:
+    stringData:
+      token: fixture
+
+jobs:
+  migrate:
+    inheritFrom: default
+    command: ["sh", "-c", "echo migrate"]
+    restartPolicy: Never
+    backoffLimit: 1
+
+extraObjects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: "{{ include \"common.names.fullname\" . }}-extra"

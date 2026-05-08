@@ -8,7 +8,7 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 # Chart variables
-REGISTRY := ghcr.io/michaelw
+REGISTRY := ghcr.io/michaelw/charts
 CHART_NAME := common.itsumi
 CHART_VERSION := $(shell grep '^version:' Chart.yaml | cut -d' ' -f2)
 CHART_PACKAGE = $(CHART_NAME)-$(CHART_VERSION).tgz
@@ -56,4 +56,4 @@ publish: package ## Publish to Container Registry
 	@echo "📤 Publishing to $(REGISTRY)..."
 	@echo "$(GITHUB_TOKEN)" | helm registry login ghcr.io -u "$(GITHUB_USERNAME)" --password-stdin
 	helm push $(CHART_PACKAGE) oci://$(REGISTRY)
-	@echo "✅ Published to $(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
+	@echo "✅ Published to oci://$(REGISTRY)/$(CHART_NAME):$(CHART_VERSION)"
