@@ -2,11 +2,13 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
     ".": {
-        "release-type": "helm",
-        "bump-minor-pre-major": true,
-        "extra-files": [
-          "starter-template/Chart.yaml.jinja"
-        ]
+      "release-type": "helm",
+      "package-name": "common.itsumi",
+      "component": "common.itsumi",
+      "include-component-in-tag": true,
+      "extra-files": [
+        "starter-template/Chart.yaml.jinja"
+      ]
     }
   }
 }

@@ -2,55 +2,121 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, master]
+    branches: [main]
   push:
-    branches: [main, master]
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  CHART_PATH: .
+  CHART_NAME: common.itsumi
+  FIXTURE_PATH: test/fixtures/common-itsumi-fixture
 
 jobs:
-  lint-and-test:
+  pre-commit:
+    name: Pre-commit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          fetch-depth: 0
+          python-version: "3.x"
+
+      - name: Run pre-commit hooks
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pre-commit==4.5.1
+          pre-commit run --all-files --show-diff-on-failure
+
+  helm:
+    name: Helm validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Helm
         uses: ./.github/actions/setup-helm
 
-      - name: Validate Helm chart
-        run: |
-          make test
-          echo "✅ Chart validation completed"
+      - name: Build chart dependencies
+        run: helm dependency build "${CHART_PATH}"
 
-      - name: Validate template helpers
-        run: |
-          echo "🔍 Validating template helpers..."
-          # Check that all helpers mentioned in README exist in templates
-          grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u | while read -r helper; do
-            echo "Checking helper: $helper"
-            if ! grep -r "$helper" templates/; then
-              echo "❌ Helper $helper mentioned in README but not found in templates"
-              exit 1
-            fi
-          done
-          echo "✅ All helpers validated"
+      - name: Lint library chart
+        run: helm lint "${CHART_PATH}"
 
-  validate-docs:
+      - name: Inspect library chart
+        run: |
+          helm show chart "${CHART_PATH}"
+          helm show values "${CHART_PATH}"
+
+      - name: Build fixture dependencies
+        run: helm dependency build "${FIXTURE_PATH}"
+
+      - name: Render fixture manifests
+        run: |
+          mkdir -p artifacts/manifests
+          helm template common-itsumi-fixture "${FIXTURE_PATH}" \
+            --namespace common-itsumi \
+            > artifacts/manifests/common-itsumi-fixture.yaml
+
+      - name: Upload rendered manifests
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: rendered-manifests
+          path: artifacts/manifests
+          if-no-files-found: error
+
+  starter-template:
+    name: Starter template
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Validate README examples
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.x"
+
+      - name: Set up Helm
+        uses: ./.github/actions/setup-helm
+
+      - name: Install Copier
         run: |
-          # Check if all template helpers mentioned in README exist
-          echo "Validating template helpers..."
-          grep -o 'common\.itsumi\.[a-zA-Z_.]*' README.md | sort -u | while read -r helper; do
-            echo "Checking helper: $helper"
-            if ! grep -r "$helper" templates/; then
-              echo "❌ Helper $helper mentioned in README but not found in templates"
-              exit 1
-            fi
-          done
-          echo "✅ All helpers validated"
+          python -m pip install --upgrade pip
+          python -m pip install copier==9.8.0
+
+      - name: Build library chart dependencies
+        run: helm dependency build "${CHART_PATH}"
+
+      - name: Generate starter chart
+        run: copier copy --trust --defaults --skip-tasks . "${RUNNER_TEMP}/starter-chart"
+
+      - name: Use local library chart dependency
+        run: |
+          sed -i.bak \
+            "s#repository: oci://ghcr.io/michaelw/charts#repository: file://${GITHUB_WORKSPACE}#" \
+            "${RUNNER_TEMP}/starter-chart/Chart.yaml"
+          rm "${RUNNER_TEMP}/starter-chart/Chart.yaml.bak"
+
+      - name: Validate starter chart
+        run: |
+          helm dependency build "${RUNNER_TEMP}/starter-chart"
+          helm lint "${RUNNER_TEMP}/starter-chart"
+          mkdir -p artifacts/manifests
+          helm template common-itsumi-starter "${RUNNER_TEMP}/starter-chart" \
+            --namespace common-itsumi \
+            > artifacts/manifests/common-itsumi-starter.yaml
+
+      - name: Upload starter rendered manifests
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: starter-rendered-manifests
+          path: artifacts/manifests
+          if-no-files-found: error

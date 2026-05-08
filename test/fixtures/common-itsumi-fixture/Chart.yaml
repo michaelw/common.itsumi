@@ -1,0 +1,11 @@
+apiVersion: v2
+name: common-itsumi-fixture
+description: Fixture application chart for validating common.itsumi helpers.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+dependencies:
+  - name: common.itsumi
+    version: 0.5.1
+    repository: file://../../..

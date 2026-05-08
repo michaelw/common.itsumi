@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Automerge Renovate version bumps after required CI passes",
+      "matchManagers": [
+        "github-actions",
+        "pre-commit",
+        "helmv3"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "merge-commit",
+      "platformAutomerge": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "enabled": true
+    },
+    {
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "enabled": true
+    },
+    {
+      "matchManagers": [
+        "helmv3"
+      ],
+      "enabled": true
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "automergeType": "pr",
+    "automergeStrategy": "merge-commit",
+    "platformAutomerge": true
+  }
+}

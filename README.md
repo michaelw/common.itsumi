@@ -11,7 +11,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 dependencies:
   - name: common.itsumi
     version: 0.5.x
-    repository: oci://ghcr.io/michaelw
+    repository: oci://ghcr.io/michaelw/charts
 ```
 
 ```console
@@ -181,8 +181,8 @@ appVersion: "1.0.0"
 
 dependencies:
   - name: common.itsumi
-    version: 0.2.x
-    repository: oci://ghcr.io/michaelw
+    version: 0.5.x
+    repository: oci://ghcr.io/michaelw/charts
 ```
 
 ```yaml
